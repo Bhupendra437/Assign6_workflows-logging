@@ -2,8 +2,8 @@
 # pylint: disable=unnecessary-dunder-call, invalid-name
 from decimal import Decimal
 import pytest
-from calculator.calculation import Calculation
-from calculator.operations import add, subtract, multiply, divide
+from app.plugins.calc.calculator.calculation import Calculation
+from app.plugins.calc.calculator.operations import add, subtract, multiply, divide
 
 
 def test_operation(a, b, operation, expected):

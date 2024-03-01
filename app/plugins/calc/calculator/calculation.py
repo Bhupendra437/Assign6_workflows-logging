@@ -3,7 +3,7 @@ from decimal import Decimal
 # Import Callable from typing to specify the operation as a callable type hint
 from typing import Callable
 # Import arithmetic operations from a module named calculator.operations
-from calculator.operations import add, subtract, multiply, divide
+from app.plugins.calc.calculator.operations import add, subtract, multiply, divide
 
 # Definition of the Calculation class with type annotations for improved readability and safety
 class Calculation:

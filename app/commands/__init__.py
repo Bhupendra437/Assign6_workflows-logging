@@ -1,25 +1,30 @@
+# app/commands/__init__.py
+
+"""Module containing command-related classes."""
+
 from abc import ABC, abstractmethod
 
 class Command(ABC):
+    """Abstract base class for commands."""
+
     @abstractmethod
     def execute(self):
-        pass
+        """Execute the command."""
+        # No need for a pass statement here
 
 class CommandHandler:
+    """Class to handle commands."""
+
     def __init__(self):
+        """Initialize CommandHandler."""
         self.commands = {}
 
     def register_command(self, command_name, command: Command):
+        """Register a command."""
         self.commands[command_name] = command
 
     def execute_command(self, command, args):
-        """ Look before you leap (LBYL) - Use when its less likely to work
-        if command_name in self.commands:
-            self.commands[command_name].execute()
-        else:
-            print(f"No such command: {command_name}")
-        """
-        """Easier to ask for forgiveness than permission (EAFP) - Use when its going to most likely work"""
+        """Execute a command."""
         try:
             self.commands[command].execute(args)
         except KeyError:

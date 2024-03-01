@@ -1,6 +1,6 @@
 import sys
 import argparse
-from calculator import Calculator
+from app.plugins.calc.calculator import Calculator
 from decimal import Decimal, InvalidOperation
 from app.commands import Command
 

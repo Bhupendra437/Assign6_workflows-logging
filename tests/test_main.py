@@ -1,6 +1,6 @@
 '''Test moducle docstring'''
 import pytest
-from main import calculate_and_print  # Ensure this import matches your project structure
+from app.plugins.calc import CalcCommand  # Ensure this import matches your project structure
 from tests.conftest import generate_test_data
 
 # Parameterize the test function to cover different operations and scenarios, including errors

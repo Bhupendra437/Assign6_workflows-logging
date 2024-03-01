@@ -1,12 +1,9 @@
 '''My Calculator Test'''
 from decimal import Decimal
 import pytest
-from calculator.calculation import Calculation
-from calculator.calculations import Calculations
-from calculator.operations import add, subtract
-from app.commands.calc.calculator.calculation import Calculation
-from app.commands.calc.calculator.calculations import Calculations
-from app.commands.calc.calculator.operations import add, subtract
+from app.plugins.calc.calculator.calculation import Calculation
+from app.plugins.calc.calculator.calculations import Calculations
+from app.plugins.calc.calculator.operations import add, subtract
 
 @pytest.fixture
 def setup_calculations():
