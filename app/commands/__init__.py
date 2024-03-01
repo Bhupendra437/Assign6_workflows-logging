@@ -23,4 +23,4 @@ class CommandHandler:
         try:
             self.commands[command].execute(args)
         except KeyError:
-            print(f"No such command: {command_name}")
+            print(f"No such command: {command}")
