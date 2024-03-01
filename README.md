@@ -1,1 +1,1 @@
-# Testing calculator with faker 
+# Going from Scripts to App 
