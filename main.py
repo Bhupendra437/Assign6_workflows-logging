@@ -1,11 +1,31 @@
-# main.py
 import sys
-from app import App    
+import multiprocessing
+from app import App
 
-# You must put this in your main.py because this forces the program to start when you run it from the command line.
-if __name__ == "__main__":
-    app = App().start()  # Instantiate an instance of App
+def cpu_bound_task(data):
+    # Perform CPU-bound computation on data
+    result = ...  # Compute result from data
+    return result
 
 def main(args=None):
     if args is None:
         args = sys.argv
+
+    app = App()
+    app.start()
+    # Create a multiprocessing pool with the number of CPU cores
+    num_cores = multiprocessing.cpu_count()
+    pool = multiprocessing.Pool(processes=num_cores)
+
+    try:
+        # Your CPU-bound task or command execution logic goes here
+        results = pool.map(cpu_bound_task, your_data_list)
+        # Process the results as needed
+    finally:
+        # Close the pool to release resources
+        pool.close()
+        pool.join()
+
+if __name__ == "__main__":
+    main()
+
