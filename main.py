@@ -17,6 +17,9 @@ def main(args=None):
     num_cores = multiprocessing.cpu_count()
     pool = multiprocessing.Pool(processes=num_cores)
 
+    # Define your_data_list with some sample data
+    your_data_list = [1, 2, 3]  # Define your sample data here
+
     try:
         # Your CPU-bound task or command execution logic goes here
         results = pool.map(cpu_bound_task, your_data_list)

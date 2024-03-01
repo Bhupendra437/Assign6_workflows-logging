@@ -16,6 +16,9 @@ from tests.conftest import generate_test_data
 ])
 def test_calculate_and_print(a_string, b_string, operation_string,expected_string, capsys):
     '''test function docstring'''
-    calculate_and_print(a_string, b_string, operation_string)
+    # Create an instance of the CalcCommand class
+    calc_command = CalcCommand()
+    # Call the execute method of the CalcCommand class to calculate and print the result
+    calc_command.execute([a_string, b_string, operation_string])
     captured = capsys.readouterr()
     assert captured.out.strip() == expected_string
