@@ -4,6 +4,7 @@ This module defines the GreetCommand class, which is a command to greet a person
 from app.commands import Command
 
 class GreetCommand(Command):
+    # pylint: disable=arguments-differ
     """
     A command to greet a person.
     """

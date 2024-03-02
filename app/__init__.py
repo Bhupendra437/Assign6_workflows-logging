@@ -1,11 +1,7 @@
-"""
-This module defines the main application class.
-"""
-
 import pkgutil
 import importlib
-from app.commands import CommandHandler
-from app.commands import Command
+import logging
+from app.commands import CommandHandler, Command
 from app.plugins.menu import MenuCommand
 
 class App:
@@ -28,16 +24,19 @@ class App:
         Dynamically load all plugins in the plugins directory.
         """
         plugins_package = 'app.plugins'
-        for _, plugin_name, is_pkg in pkgutil.iter_modules([plugins_package.replace('.', '/')]):
-            if is_pkg:
-                plugin_module = importlib.import_module(f'{plugins_package}.{plugin_name}')
-                for item_name in dir(plugin_module):
-                    item = getattr(plugin_module, item_name)
-                    try:
-                        if issubclass(item, Command) and item != Command:
-                            self.command_handler.register_command(plugin_name, item())
-                    except TypeError:
-                        continue
+        try:
+            for _, plugin_name, is_pkg in pkgutil.iter_modules([plugins_package.replace('.', '/')]):
+                if is_pkg:
+                    plugin_module = importlib.import_module(f'{plugins_package}.{plugin_name}')
+                    for item_name in dir(plugin_module):
+                        item = getattr(plugin_module, item_name)
+                        try:
+                            if isinstance(item, type) and issubclass(item, Command) and item != Command:
+                                self.command_handler.register_command(plugin_name, item())
+                        except TypeError:
+                            continue
+        except Exception as e:
+            logging.error(f"Error loading plugins: {e}")
 
     def start(self):
         """
@@ -47,8 +46,12 @@ class App:
         self.command_handler.register_command("menu", MenuCommand(self.command_handler))
         print("Type 'exit' to exit.")
         while True:
-            user_input = input(">>> ").strip().split()
-            print(f"Received command: {user_input}")
-            command = user_input[0]
-            args = user_input[1:]
-            self.command_handler.execute_command(command, args)
+            try:
+                user_input = input(">>> ").strip().split()
+                print(f"Received command: {user_input}")
+                if user_input:  # Check if the list is not empty
+                    command = user_input[0]
+                    args = user_input[1:]
+                    self.command_handler.execute_command(command, args)
+            except App.ExitApplication:
+                break

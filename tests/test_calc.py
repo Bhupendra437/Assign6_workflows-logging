@@ -14,9 +14,9 @@ def test_execute_valid_args(capsys):
     # Instantiate CalcCommand
     calc_command = CalcCommand()
     # Mock the Calculator class
-    with patch('app.plugins.calc.calculator.Calculator') as mock_calculator:
-        # Configure the mock calculator to return a specific result for the add method
-        mock_calculator.return_value.add.return_value = 8
+    with patch('app.plugins.calc.calculator.Calculator._perform_operation') as mock_perform_operation:
+        # Configure the mock calculator to return a specific result for the add operation
+        mock_perform_operation.return_value = 8
         # Execute the command
         calc_command.execute(['5', '3', 'add'])
         # Capture printed output
