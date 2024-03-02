@@ -1,7 +1,15 @@
-from app.plugins.menu import MenuCommand
+"""
+Unit tests for the MenuCommand class.
+"""
+
 from unittest.mock import MagicMock
+from app.plugins.menu import MenuCommand
 
 def test_menu_command(capsys):
+    """
+    Test the execute method of MenuCommand.
+    It should print the correct menu.
+    """
     # Create a mock CommandHandler
     command_handler_mock = MagicMock()
     # Set up the MenuCommand with the mock CommandHandler
