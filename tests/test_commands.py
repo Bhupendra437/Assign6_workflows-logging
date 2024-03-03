@@ -1,46 +1,38 @@
-"""
-Unit tests for the commands module.
-"""
+"""Tests for the Command and CommandHandler classes in app.commands."""
 
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 import pytest
-from app import App
-from app.commands import CommandHandler
-from app.plugins.menu import MenuCommand
-from app.commands import Command
+from app.commands import Command, CommandHandler
 
-def test_load_plugins_registers_plugin_command():
-    """
-    Test that the load_plugins method registers plugin commands correctly.
-    """
-    with patch('app.pkgutil.iter_modules'):
-        with patch('app.importlib.import_module') as mock_import_module:
-            mock_plugin_module = MagicMock()
-            mock_command_class = MagicMock(spec=Command)
-            mock_plugin_module.__iter__.return_value = [('plugin_name', mock_command_class, True)]
-            mock_import_module.return_value = mock_plugin_module
+class MockCommand(Command):
+    """Mock subclass of Command for testing purposes."""
+    def execute(self):
+        """Mock execute method."""
+        print("Executing MockCommand")
 
-            app = App()
-            with patch.object(app, 'command_handler') as mock_command_handler:
-                app.load_plugins()
-                mock_command_handler.register_command.assert_called_once_with('plugin_name', mock_command_class)
+def test_register_command():
+    """Test that commands can be registered correctly."""
+    command_handler = CommandHandler()
+    mock_command = MockCommand()
 
-def test_start_registers_menu_command_and_starts():
-    """
-    Test that the start method registers the menu command and starts the application correctly.
-    """
-    with patch('app.commands.CommandHandler') as mock_command_handler:
-        with patch('app.plugins.menu.MenuCommand') as mock_menu_command:
-            app = App()
-            predefined_input = ['exit']
+    command_handler.register_command("mock", mock_command)
+    assert "mock" in command_handler.commands
+    assert command_handler.commands["mock"] == mock_command
 
-            with patch('builtins.input', side_effect=predefined_input):
-                try:
-                    app.start()
-                except SystemExit as e:
-                    assert str(e) == "Exiting..."
-                else:
-                    pytest.fail("Expected SystemExit not raised")
+def test_execute_command():
+    """Test that registered commands can be executed."""
+    command_handler = CommandHandler()
+    mock_command = MockCommand()
 
-    # You can also add additional assertions here to check that
-    # the menu command was registered correctly, etc.
+    with patch.object(MockCommand, 'execute') as mock_execute:
+        command_handler.register_command("mock", mock_command)
+        command_handler.execute_command("mock", [])
+        mock_execute.assert_called_once()
+
+def test_execute_nonexistent_command(capsys):
+    """Test that executing a nonexistent command prints an error message."""
+    command_handler = CommandHandler()
+    command_handler.execute_command("nonexistent", [])
+
+    captured = capsys.readouterr()
+    assert "No such command: nonexistent" in captured.out
