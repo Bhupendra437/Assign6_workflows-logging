@@ -1,6 +1,7 @@
 import pkgutil
 import importlib
 import logging
+import time
 from app.commands import CommandHandler, Command
 from app.plugins.menu import MenuCommand
 
@@ -13,6 +14,10 @@ class App:
         """Custom exception for exiting the application."""
         pass
 
+    class TestInputEnd(Exception):
+        """Exception to signal the end of input in tests."""
+        pass
+
     def __init__(self):
         """
         Constructor for the App class.
@@ -21,7 +26,7 @@ class App:
 
     def load_plugins(self):
         """
-        Dynamically load all plugins in the plugins directory.
+        Load plugins dynamically from the app.plugins package.
         """
         plugins_package = 'app.plugins'
         try:
@@ -32,7 +37,8 @@ class App:
                         item = getattr(plugin_module, item_name)
                         try:
                             if isinstance(item, type) and issubclass(item, Command) and item != Command:
-                                self.command_handler.register_command(plugin_name, item())
+                                command_name = getattr(item, 'name', item.__name__.lower())
+                                self.command_handler.register_command(command_name, item())
                         except TypeError:
                             continue
         except Exception as e:
@@ -48,10 +54,12 @@ class App:
         while True:
             try:
                 user_input = input(">>> ").strip().split()
-                print(f"Received command: {user_input}")
-                if user_input:  # Check if the list is not empty
-                    command = user_input[0]
+                if user_input:
+                    command = user_input[0].lower()
                     args = user_input[1:]
+                    print(f"Received command: {command} with args: {args}")
                     self.command_handler.execute_command(command, args)
             except App.ExitApplication:
                 break
+            except Exception as e:
+                print(f"Error executing command: {e}")

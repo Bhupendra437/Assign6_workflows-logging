@@ -5,6 +5,7 @@ from decimal import Decimal, InvalidOperation
 from app.commands import Command
 
 class CalcCommand(Command):
+    name = 'calc'
     def execute(self, args):
         if len(args) != 3:
             print("Usage: calc <number1> <number2> <operation>")

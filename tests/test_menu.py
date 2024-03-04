@@ -1,22 +1,37 @@
 """
-Unit tests for the MenuCommand class.
+This module contains unit tests for the MenuCommand class.
 """
 
 from unittest.mock import MagicMock
+import pytest
 from app.plugins.menu import MenuCommand
+from app.commands import CommandHandler
 
-def test_menu_command(capsys):
+@pytest.fixture
+def command_handler():
     """
-    Test the execute method of MenuCommand.
-    It should print the correct menu.
+    Fixture for creating a mock CommandHandler.
     """
-    # Create a mock CommandHandler
-    command_handler_mock = MagicMock()
-    # Set up the MenuCommand with the mock CommandHandler
-    menu_command = MenuCommand(command_handler_mock)
-    # Execute the command
+    handler = CommandHandler()
+    handler.commands = {
+        'command1': MagicMock(),
+        'command2': MagicMock(),
+        'command3': MagicMock()
+    }
+    return handler
+
+@pytest.fixture
+def menu_command(command_handler):
+    """
+    Fixture for creating an instance of MenuCommand.
+    """
+    return MenuCommand(command_handler)
+
+def test_menu_command_execution(menu_command, capsys):
+    """
+    Test the execution of the menu command.
+    """
     menu_command.execute([])
-    # Check if the correct menu is printed
     captured = capsys.readouterr()
-    expected_output = "Available commands:\n"
+    expected_output = "Available commands:\n- command1\n- command2\n- command3\n"
     assert captured.out == expected_output

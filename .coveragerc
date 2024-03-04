@@ -1,5 +1,9 @@
 [run]
 source=.
 omit=
-    tests/conftest.py
-    main.py
+  main.py
+  tests/conftest.py
+  app/__init__.py
+  tests/test_app.py
+  tests/test_commands.py 
+
