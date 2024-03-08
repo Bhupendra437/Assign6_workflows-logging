@@ -1,6 +1,7 @@
 """This module demonstrates multiprocessing in Python."""
 import sys
 import multiprocessing
+import logging
 from app import App
 
 def cpu_bound_task(data):
@@ -12,8 +13,9 @@ def cpu_bound_task(data):
     Returns:
         The result of the computation.
     """
-    # Compute result from data
+    logging.debug(f"Processing data: {data}")
     result = ...  # Replace with actual computation
+    logging.debug(f"Result for data {data}: {result}")
     return result
 
 def main(args=None):
@@ -25,21 +27,21 @@ def main(args=None):
     if args is None:
         args = sys.argv
 
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.info("Starting the application")
+
     app = App()
     app.start()
-    # Define your_data_list with some sample data
     your_data_list = [1, 2, 3]  # Define your sample data here
 
-    # Create a multiprocessing pool with the number of CPU cores
     num_cores = multiprocessing.cpu_count()
+    logging.info(f"Number of CPU cores: {num_cores}")
     with multiprocessing.Pool(processes=num_cores) as pool:
         try:
             results = pool.map(cpu_bound_task, your_data_list)
-            print(results)
-            # Process the results as needed
+            logging.info(f"Results: {results}")
         except Exception as e:
-            print(f"An error occurred: {e}")
-            # Handle the error gracefully
+            logging.error(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     main()

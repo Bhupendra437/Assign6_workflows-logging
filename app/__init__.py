@@ -22,6 +22,7 @@ class App:
         """
         Constructor for the App class.
         """
+        logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
         self.command_handler = CommandHandler()
 
     def load_plugins(self):
@@ -50,16 +51,16 @@ class App:
         """
         self.load_plugins()
         self.command_handler.register_command("menu", MenuCommand(self.command_handler))
-        print("Type 'exit' to exit.")
+        logging.info("Type 'exit' to exit.")
         while True:
             try:
                 user_input = input(">>> ").strip().split()
                 if user_input:
                     command = user_input[0].lower()
                     args = user_input[1:]
-                    print(f"Received command: {command} with args: {args}")
+                    logging.debug(f"Received command: {command} with args: {args}")
                     self.command_handler.execute_command(command, args)
             except App.ExitApplication:
                 break
             except Exception as e:
-                print(f"Error executing command: {e}")
+                logging.error(f"Error executing command: {e}")
