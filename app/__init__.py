@@ -1,7 +1,8 @@
 import pkgutil
 import importlib
 import logging
-import time
+import os
+from dotenv import load_dotenv
 from app.commands import CommandHandler, Command
 from app.plugins.menu import MenuCommand
 
@@ -22,7 +23,13 @@ class App:
         """
         Constructor for the App class.
         """
-        logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+        # Load environment variables from .env file
+        load_dotenv()
+
+        # Use environment variables
+        log_level = os.getenv('LOG_LEVEL', 'DEBUG')
+        logging.basicConfig(level=log_level, format='%(asctime)s - %(levelname)s - %(message)s')
+
         self.command_handler = CommandHandler()
 
     def load_plugins(self):
